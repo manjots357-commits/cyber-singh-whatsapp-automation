@@ -1,0 +1,66 @@
+# ===== Secrets & local configuration (NEVER commit) =====
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*secret*
+*token*
+credentials*.json
+
+# ===== Databases, contacts, consent records, campaign history (private data) =====
+*.db
+*.db-wal
+*.db-shm
+*.db-journal
+*.sqlite
+*.sqlite3
+data/
+backups/
+contacts*.csv
+*contacts*.csv
+exports/
+sent_log*.csv
+*.log
+
+# ===== Browser sessions (a WhatsApp Web profile = a logged-in account) =====
+wa_browser_profile/
+*_profile/
+.wwebjs_auth/
+.wwebjs_cache/
+
+# ===== Python / tooling =====
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ===== OS / editors =====
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+
+# ===== Local-only legacy files from before the official-API rewrite =====
+# Kept on the author's computer, deliberately NOT published (unofficial WhatsApp Web
+# automation violates WhatsApp's terms; old scripts contain personal paths/numbers).
+legacy/
+whatsapp_web_sender.py
+start_whatsapp_web.bat
+seed_data.py
+test_automation.py
+static/index.html
+# Retired stubs that point at the legacy/ folder above
+audit_verifier.py
+campaign_manager.py
+run_batch_dispatch.py
+start_cli.bat
+*.bundle

@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhatsApp Campaigns</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#14181f;--mut:#667085;--line:#e4e7ec;--acc:#0f766e;--acc-ink:#fff;
+--ok:#067647;--okbg:#ecfdf3;--warn:#b54708;--warnbg:#fffaeb;--bad:#b42318;--badbg:#fef3f2;--info:#175cd3;--infobg:#eff8ff}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1116;--card:#171b22;--ink:#eef1f5;--mut:#9aa4b2;--line:#2a313c;--acc:#2dd4bf;--acc-ink:#04201c;
+--ok:#6ce9a6;--okbg:#0c2a1c;--warn:#fec84b;--warnbg:#2b2108;--bad:#fda29b;--badbg:#2d1311;--info:#84caff;--infobg:#0f2238}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:center;gap:16px;padding:12px 24px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+header h1{font-size:17px;margin:0}
+nav{display:flex;gap:4px;flex-wrap:wrap}nav button{background:none;border:0;padding:8px 12px;border-radius:8px;color:var(--mut);font:inherit;cursor:pointer}
+nav button.on{background:var(--bg);color:var(--ink);font-weight:600}
+#mode{margin-left:auto;font-size:13px;font-weight:600;padding:4px 10px;border-radius:99px}
+.live{background:var(--badbg);color:var(--bad)}.sim{background:var(--infobg);color:var(--info)}
+main{max-width:1100px;margin:0 auto;padding:24px 16px 80px}
+section{display:none}section.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px}
+.card h2{font-size:16px;margin:0 0 4px}.sub{color:var(--mut);font-size:13px;margin:0 0 14px}
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 4px}
+input[type=text],input[type=url],select,textarea{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:90px;resize:vertical}
+button.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+button.btn.sec{background:var(--bg);color:var(--ink);border:1px solid var(--line)}button.btn.danger{background:var(--bad);color:#fff}
+button.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.row>*{flex:0 0 auto}.grow{flex:1 1 220px!important}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.p-ok{background:var(--okbg);color:var(--ok)}.p-warn{background:var(--warnbg);color:var(--warn)}.p-bad{background:var(--badbg);color:var(--bad)}.p-info{background:var(--infobg);color:var(--info)}.p-mut{background:var(--bg);color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}.tile b{display:block;font-size:26px}.tile span{color:var(--mut);font-size:13px}
+.notice{padding:10px 14px;border-radius:8px;margin:10px 0;font-size:14px}
+.n-ok{background:var(--okbg);color:var(--ok)}.n-warn{background:var(--warnbg);color:var(--warn)}.n-bad{background:var(--badbg);color:var(--bad)}.n-info{background:var(--infobg);color:var(--info)}
+.steps{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.step{flex:1 1 140px;padding:8px 12px;border-radius:8px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--mut)}
+.step.on{border-color:var(--acc);color:var(--ink);font-weight:600}.step.done{color:var(--ok)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;background:var(--bg);font-size:14px}
+.chip.on{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}.chip small{display:block;color:var(--mut)}
+.msg{white-space:pre-wrap;background:var(--bg);border-radius:8px;padding:10px;font-size:13px;max-height:140px;overflow:auto}
+.bar{height:10px;background:var(--bg);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+.bars{display:flex;align-items:flex-end;gap:6px;height:110px}.bars div{flex:1;background:var(--acc);border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.bars div span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:11px;color:var(--mut)}
+.scroll{max-height:340px;overflow:auto}details summary{cursor:pointer;color:var(--mut);margin:6px 0}
+</style>
+</head>
+<body>
+<header>
+  <h1>WhatsApp Campaigns</h1>
+  <nav id="nav"></nav>
+  <span id="mode" class="sim">…</span>
+</header>
+<main>
+
+<!-- ============ CAMPAIGN ============ -->
+<section id="s-campaign" class="on">
+  <div class="steps" id="steps"></div>
+
+  <div class="card" id="c1">
+    <h2>1. Link and message</h2>
+    <p class="sub">Paste the link you want to share and choose the message.</p>
+    <label for="url">Website / video URL</label>
+    <div class="row"><input type="url" id="url" class="grow" placeholder="https://www.youtube.com/@CYBERSINGH_Ai"><button class="btn sec" id="analyse">Analyse link</button></div>
+    <div id="draftOut"></div>
+    <label for="title">Campaign name <span class="pill p-mut">internal</span></label>
+    <input type="text" id="title" placeholder="e.g. Episode 9 launch">
+    <label>Message type</label>
+    <div class="chips" id="mtype">
+      <div class="chip on" data-v="template">Approved template<small>Required to message people first</small></div>
+      <div class="chip" data-v="text">Free text<small>Only people who wrote to you in the last 24h</small></div>
+    </div>
+    <div id="tplBox">
+      <label for="tplSel">Template</label><select id="tplSel"></select>
+      <div class="notice n-info" id="tplHelp"></div>
+      <div class="msg" id="tplBody"></div>
+    </div>
+    <div id="txtBox" style="display:none">
+      <label for="txt">Message</label>
+      <textarea id="txt"></textarea>
+      <p class="sub">Placeholders: {{name}}, {{video_url}}, {{video_title}}, {{group_name}}</p>
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="to2">Next: choose people</button></div>
+  </div>
+
+  <div class="card" id="c2" style="display:none">
+    <h2>2. Who receives it</h2>
+    <p class="sub">Only people with a recorded opt-in who have not replied STOP can be selected.</p>
+    <div class="chips" id="groups"></div>
+    <details><summary>Or pick individual people</summary>
+      <div class="row"><input type="text" id="pickQ" class="grow" placeholder="Search name or number"><button class="btn sec" id="pickAll">Select all shown</button><button class="btn sec" id="pickNone">Clear</button></div>
+      <div class="scroll"><table><tbody id="pickList"></tbody></table></div>
+    </details>
+    <div class="notice n-warn" id="noSendable" style="display:none">Nobody is opted in yet. Go to the <b>Contacts</b> tab, import your list and record who agreed to receive your messages.</div>
+    <div class="row" style="margin-top:14px"><button class="btn sec" id="back1">Back</button><button class="btn" id="to3">Preview campaign</button></div>
+  </div>
+
+  <div class="card" id="c3" style="display:none">
+    <h2>3. Preview and approve</h2>
+    <div id="pv"></div>
+  </div>
+
+  <div class="card" id="c4" style="display:none">
+    <h2>Sending</h2>
+    <div id="prog"></div>
+  </div>
+</section>
+
+<!-- ============ CONTACTS ============ -->
+<section id="s-contacts">
+  <div class="tiles" id="ctiles"></div>
+  <div class="card">
+    <h2>Import contacts</h2>
+    <p class="sub">Upload a Google Contacts CSV (or a CSV with <code>Name,Phone</code> columns). Imported people are <b>not</b> opted in until you record how they agreed.</p>
+    <div class="row">
+      <input type="file" id="csvFile" accept=".csv,text/csv">
+      <select id="impGroup"></select>
+      <button class="btn" id="impBtn">Import</button>
+    </div>
+    <div id="impOut"></div>
+  </div>
+  <div class="card">
+    <h2>Contacts</h2>
+    <div class="row">
+      <input type="text" id="cq" class="grow" placeholder="Search name or number">
+      <select id="cstatus"><option value="all">All</option><option value="sendable">Ready to message</option><option value="unverified">Opt-in not recorded</option><option value="opted_out">Opted out</option></select>
+      <button class="btn sec" id="cgo">Search</button>
+    </div>
+    <div class="row" style="margin:12px 0">
+      <button class="btn" id="optBtn" disabled>Record opt-in for selected</button>
+      <button class="btn sec" id="revBtn" disabled>Mark selected as opted out</button>
+      <span id="selCount" class="pill p-mut">0 selected</span>
+    </div>
+    <div id="optPanel" class="notice n-info" style="display:none">
+      <label for="basis" style="margin-top:0">How did these people agree to get WhatsApp messages from you?</label>
+      <select id="basis"></select>
+      <label style="display:flex;gap:8px;font-weight:400;align-items:flex-start"><input type="checkbox" id="attest" style="margin-top:4px"> I confirm that every selected person agreed to receive WhatsApp messages from me, and I can show how if asked.</label>
+      <div class="row" style="margin-top:10px"><button class="btn" id="optOk">Save opt-in</button><button class="btn sec" id="optNo">Cancel</button></div>
+    </div>
+    <div class="scroll" style="max-height:480px"><table><thead><tr><th><input type="checkbox" id="selAll"></th><th>Name</th><th>Number</th><th>Group</th><th>Consent</th></tr></thead><tbody id="clist"></tbody></table></div>
+    <p class="sub" id="cmore"></p>
+  </div>
+  <div class="card">
+    <h2>Add one person</h2>
+    <div class="row"><input type="text" id="nName" placeholder="Name" class="grow"><input type="text" id="nPhone" placeholder="Phone (+91…)" class="grow"><select id="nGroup"></select><button class="btn" id="nAdd">Add</button></div>
+  </div>
+</section>
+
+<!-- ============ TEMPLATES ============ -->
+<section id="s-templates">
+  <div class="card">
+    <h2>Message templates</h2>
+    <p class="sub">Meta must approve a template before you can message people who have not written to you in the last 24 hours. Approval usually takes minutes to a day.</p>
+    <div class="row"><button class="btn" id="syncBtn">Sync from Meta</button><span id="syncOut"></span></div>
+    <table style="margin-top:12px"><thead><tr><th>Name</th><th>Lang</th><th>Category</th><th>Status</th><th>Body</th></tr></thead><tbody id="tlist"></tbody></table>
+  </div>
+  <div class="card">
+    <h2>Create template</h2>
+    <p class="sub">Use <code>{{1}}</code> for the person's name and <code>{{2}}</code> for the link. Text must come before the first and after the last variable.</p>
+    <div class="row"><div class="grow"><label>Name (a-z, 0-9, _)</label><input type="text" id="tName"></div>
+      <div style="width:110px"><label>Language</label><input type="text" id="tLang"></div>
+      <div style="width:150px"><label>Category</label><select id="tCat"><option>MARKETING</option><option>UTILITY</option></select></div></div>
+    <label>Body</label><textarea id="tBody"></textarea>
+    <label>Footer (optional)</label><input type="text" id="tFoot">
+    <label style="display:flex;gap:8px;font-weight:400"><input type="checkbox" id="tStop" checked> Add a STOP button so people can opt out</label>
+    <div class="row" style="margin-top:12px"><button class="btn" id="tCreate">Submit to Meta for approval</button><button class="btn sec" id="tFill">Use suggested Cyber Singh template</button></div>
+    <div id="tOut"></div>
+  </div>
+  <div class="card">
+    <h2>Send a test to yourself</h2>
+    <p class="sub">Sends one approved template to the number in <code>OWNER_WHATSAPP_NUMBER</code> (your own number).</p>
+    <div class="row"><select id="tsTpl" class="grow"></select><input type="text" id="tsP1" placeholder="{{1}} name" value="Manjot"><input type="text" id="tsP2" placeholder="{{2}} link"><button class="btn" id="tsGo">Send test</button></div>
+    <div id="tsOut"></div>
+  </div>
+</section>
+
+<!-- ============ ANALYTICS ============ -->
+<section id="s-analytics"><div id="an"></div></section>
+
+<!-- ============ HISTORY ============ -->
+<section id="s-history">
+  <div class="card"><h2>Campaigns</h2><table><thead><tr><th>#</th><th>Name</th><th>Status</th><th>Sent</th><th>Failed</th><th>Skipped</th><th>Created</th></tr></thead><tbody id="hlist"></tbody></table></div>
+  <div class="card" id="hdet" style="display:none"></div>
+</section>
+
+<!-- ============ SETUP ============ -->
+<section id="s-setup">
+  <div class="card"><h2>Live sending</h2>
+    <p class="sub">The dashboard stays in <b>simulation</b> until a real test message to your own number has been <b>delivered</b> (confirmed by Meta) and you authorise live sending here.</p>
+    <div id="live"></div></div>
+  <div class="card"><h2>Setup checklist</h2><p class="sub">Everything that must be green before you send for real.</p>
+    <div class="row"><button class="btn" id="rdLive">Check with Meta now</button><button class="btn sec" id="subBtn">Subscribe webhook</button></div>
+    <div id="rd" style="margin-top:12px"></div></div>
+  <div class="card"><h2>Webhook address</h2>
+    <p class="sub">In Meta (WhatsApp → Configuration) set the callback URL to <code id="whUrl"></code> and the verify token to the value of <code>WEBHOOK_VERIFY_TOKEN</code> in your .env. Subscribe to <b>messages</b> and <b>message_template_status_update</b>. Meta needs a public HTTPS address - see README for ngrok / cloud hosting.</p></div>
+</section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path,opts={}){
+  const r=await fetch(path,{headers:{'Content-Type':'application/json'},...opts,body:opts.body?JSON.stringify(opts.body):undefined});
+  let d={};try{d=await r.json()}catch(e){}
+  if(!r.ok){throw new Error(d.detail||('Request failed ('+r.status+')'))}
+  return d;
+}
+const notice=(el,msg,kind='bad')=>{el.innerHTML=msg?`<div class="notice n-${kind}">${esc(msg)}</div>`:''};
+const TABS=[['campaign','New campaign'],['contacts','Contacts & consent'],['templates','Templates'],['analytics','Analytics'],['history','History'],['setup','Setup']];
+$('#nav').innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('');
+function tab(t){$$('section').forEach(s=>s.classList.toggle('on',s.id==='s-'+t));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  ({contacts:loadContacts,templates:loadTemplates,analytics:loadAnalytics,history:loadHistory,setup:()=>{loadLive();loadReadiness(false)},campaign:initCampaign})[t]?.();}
+$('#nav').onclick=e=>{if(e.target.dataset.t)tab(e.target.dataset.t)};
+
+let CFG={},TPL=[],GROUPS=[],picked=new Set(),selGroups=new Set(),mtype='template',PV=null,pollT=null;
+
+/* -------- link analysis -------- */
+let DRAFT=null;
+async function analyseLink(){
+  const u=$('#url').value.trim();if(!/^https?:\/\/.+\..+/.test(u)){alert('Paste a full link starting with https://');return}
+  $('#draftOut').innerHTML='<div class="notice n-info">Reading the link...</div>';
+  try{DRAFT=await api('/api/campaigns/draft-from-url',{method:'POST',body:{url:u}});
+    if(!$('#title').value.trim())$('#title').value=DRAFT.campaign_name;
+    $('#draftOut').innerHTML=`<div class="notice n-ok"><b>${esc(DRAFT.title)}</b>${DRAFT.description?'<br>'+esc(DRAFT.description):''}</div>
+     ${DRAFT.warning?`<div class="notice n-warn">${esc(DRAFT.warning)}</div>`:''}
+     <label>Suggested messages</label>
+     ${DRAFT.messages.map(m=>`<div class="card" style="padding:12px;margin-bottom:8px"><div class="row"><b>${esc(m.label)}</b><button class="btn sec" data-use="${esc(m.id)}">${m.kind==='template'?'Create this template':'Use this text'}</button></div><div class="msg" style="margin-top:8px">${esc(m.body)}</div></div>`).join('')}`;
+  }catch(e){$('#draftOut').innerHTML=`<div class="notice n-warn">${esc(e.message)}</div>`}
+}
+$('#analyse').onclick=analyseLink;
+const UI_BUILD='2026-11-07b';
+let SELECTED_TEXT=null;
+function useDraftText(m){
+  SELECTED_TEXT=m.body;mtype='text';
+  $$('#mtype .chip').forEach(x=>x.classList.toggle('on',x.dataset.v==='text'));
+  $('#tplBox').style.display='none';$('#txtBox').style.display='';
+  $('#txt').value=m.body;
+  $$('#draftOut [data-use]').forEach(b=>{if(b.dataset.use===m.id)b.textContent='Selected \u2713'});
+  let ok=$('#useOk');if(!ok){ok=document.createElement('div');ok.id='useOk';ok.className='notice n-ok';$('#txtBox').insertBefore(ok,$('#txtBox').firstChild)}
+  ok.textContent='\u2713 Text selected. It is now in the Message box below. You can edit it, then press Next.';
+  $('#txtBox').scrollIntoView({behavior:'smooth',block:'center'});
+}
+$('#draftOut').onclick=e=>{
+  try{
+    const btn=e.target.closest('[data-use]');if(!btn)return;
+    if(!DRAFT)throw new Error('No analysed link in memory - press Analyse link again.');
+    const m=DRAFT.messages.find(x=>x.id===btn.dataset.use);
+    if(!m)throw new Error('Message "'+btn.dataset.use+'" not found in the analysed link.');
+    if(m.kind==='text')useDraftText(m);else{TPL_DRAFT=m;tab('templates')}
+  }catch(err){
+    let d=$('#useErr');if(!d){d=document.createElement('div');d.id='useErr';d.className='notice n-warn';$('#draftOut').prepend(d)}
+    d.textContent='Could not use this text: '+err.message+' (UI build '+UI_BUILD+')';
+  }};
+let TPL_DRAFT=null;
+
+/* -------- campaign wizard -------- */
+const STEPS=['Link & message','People','Preview & approve','Sending'];
+function setStep(n){$('#steps').innerHTML=STEPS.map((s,i)=>`<div class="step ${i===n?'on':''} ${i<n?'done':''}">${i+1}. ${s}</div>`).join('');
+  ['c1','c2','c3','c4'].forEach((id,i)=>$('#'+id).style.display=(i<=n && (i!==0||n<=1||true))?'':'none');
+  $('#c1').style.display=n<=1?'':'none';$('#c2').style.display=n===1?'':'none';$('#c3').style.display=n===2?'':'none';$('#c4').style.display=n===3?'':'none';}
+async function initCampaign(){
+  CFG=await api('/api/config');
+  const m=$('#mode');m.textContent=CFG.mode==='LIVE'?'LIVE - messages are really sent':'SIMULATION - nothing is sent';m.className=CFG.mode==='LIVE'?'live':'sim';
+  const t=await api('/api/templates');TPL=t.templates;
+  const ok=TPL.filter(x=>(x.status||'').toUpperCase()==='APPROVED'||CFG.mode!=='LIVE');
+  $('#tplSel').innerHTML=ok.length?ok.map(x=>`<option value="${esc(x.name)}|${esc(x.language)}">${esc(x.name)} (${esc(x.language)}) ${esc(x.status)}</option>`).join(''):'<option value="">No approved template yet</option>';
+  $('#txt').value=CFG.default_template;showTpl();
+  GROUPS=await api('/api/groups');
+  $('#groups').innerHTML=GROUPS.map(g=>`<div class="chip" data-g="${esc(g.id)}">${esc(g.name)}<small>${g.sendable_contacts||0} ready to message</small></div>`).join('');
+  $('#noSendable').style.display=GROUPS.some(g=>g.sendable_contacts>0)?'none':'';
+  setStep(0);
+}
+function showTpl(){
+  const [n,l]=($('#tplSel').value||'|').split('|');const t=TPL.find(x=>x.name===n&&x.language===l);
+  $('#tplBody').textContent=t?(t.body||'(body not synced)'):'Create a template in the Templates tab, then press "Sync from Meta".';
+  $('#tplHelp').textContent=CFG.mode==='LIVE'?'{{1}} = person\'s name, {{2}} = your link. Only APPROVED templates can be sent.':'Simulation mode: any template can be previewed; nothing reaches Meta.';
+}
+$('#tplSel').onchange=showTpl;
+$('#mtype').onclick=e=>{const c=e.target.closest('.chip');if(!c)return;mtype=c.dataset.v;$$('#mtype .chip').forEach(x=>x.classList.toggle('on',x===c));
+  $('#tplBox').style.display=mtype==='template'?'':'none';$('#txtBox').style.display=mtype==='text'?'':'none';};
+$('#to2').onclick=()=>{
+  const u=$('#url').value.trim();if(!/^https?:\/\/.+\..+/.test(u)){alert('Paste a full link starting with https://');return}
+  if(mtype==='template'&&!$('#tplSel').value){alert('Choose a template first (Templates tab).');return}
+  setStep(1);loadPick();};
+$('#back1').onclick=()=>setStep(0);
+$('#groups').onclick=e=>{const c=e.target.closest('.chip');if(!c)return;const g=c.dataset.g;selGroups.has(g)?selGroups.delete(g):selGroups.add(g);c.classList.toggle('on')};
+async function loadPick(){
+  const q=encodeURIComponent($('#pickQ').value||'');const d=await api(`/api/contacts/search?q=${q}&status=sendable&limit=200`);
+  $('#pickList').innerHTML=d.contacts.map(c=>`<tr><td><input type="checkbox" data-id="${c.id}" ${picked.has(c.id)?'checked':''}></td><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.group_name)}</td></tr>`).join('')||'<tr><td>Nobody ready yet</td></tr>';
+}
+$('#pickQ').oninput=()=>loadPick();
+$('#pickList').onchange=e=>{const id=+e.target.dataset.id;e.target.checked?picked.add(id):picked.delete(id)};
+$('#pickAll').onclick=()=>{$$('#pickList input').forEach(i=>{i.checked=true;picked.add(+i.dataset.id)})};
+$('#pickNone').onclick=()=>{picked.clear();$$('#pickList input').forEach(i=>i.checked=false)};
+$('#to3').onclick=async()=>{
+  if(!selGroups.size&&!picked.size){alert('Choose at least one group or person.');return}
+  const body={title:$('#title').value.trim()||new URL($('#url').value).hostname,video_url:$('#url').value.trim(),target_groups:[...selGroups]};
+  if(picked.size){body.contact_ids=[...picked];}
+  if(mtype==='template'){const [n,l]=$('#tplSel').value.split('|');body.template_name=n;body.template_language=l;}else{body.message_template=$('#txt').value}
+  try{PV=await api('/api/campaigns/preview',{method:'POST',body});renderPreview();setStep(2)}catch(e){alert(e.message)}
+};
+function renderPreview(){
+  const p=PV;const live=p.mode==='LIVE';
+  const rows=(arr,why)=>arr.length?`<details><summary>${arr.length} ${why}</summary><div class="scroll"><table>${arr.slice(0,200).map(x=>`<tr><td>${esc(x.contact.name)}</td><td>${esc(x.contact.phone)}</td><td>${esc(x.reason)}</td></tr>`).join('')}</table></div></details>`:'';
+  $('#pv').innerHTML=`
+   <div class="tiles"><div class="tile"><b>${p.ready_count}</b><span>will receive it</span></div>
+   <div class="tile"><b>${p.no_consent_count}</b><span>blocked - no confirmed opt-in</span></div>
+   <div class="tile"><b>${p.duplicate_count}</b><span>already got this link</span></div>
+   <div class="tile"><b>${p.capacity_remaining}</b><span>sends left in 24h (Meta tier)</span></div></div>
+   ${p.blocking_problem?`<div class="notice n-bad">${esc(p.blocking_problem)}</div>`:''}
+   ${p.deferred_count?`<div class="notice n-warn">${p.deferred_count} more people are over today's limit; they will wait and can be sent tomorrow with Resume.</div>`:''}
+   ${p.needs_template_count?`<div class="notice n-warn">${p.needs_template_count} people can't get free text (no message from them in 24h). Use an approved template.</div>`:''}
+   <div class="notice ${live?'n-bad':'n-info'}">${live?'LIVE: these are real WhatsApp messages and cannot be undone.':'SIMULATION: nothing will be sent to Meta.'}</div>
+   <label>Example messages</label>
+   ${p.screened_recipients.slice(0,3).map(r=>`<div class="msg" style="margin-bottom:6px"><b>${esc(r.contact.name)}</b> ${esc(r.contact.phone)}\n\n${esc(r.personalized_msg)}</div>`).join('')||'<div class="msg">No eligible recipients.</div>'}
+   ${rows(p.skipped_no_consent,'blocked: not opted in or opted out')}${rows(p.skipped_unverified,'blocked: opt-in not confirmed')}${rows(p.skipped_duplicate,'skipped: already received this link')}${rows(p.skipped_invalid,'skipped: invalid number')}${rows(p.needs_template,'need a template')}${rows(p.deferred,'over daily limit')}
+   <details><summary>Full recipient list (${p.ready_count})</summary><div class="scroll"><table>${p.screened_recipients.map(r=>`<tr><td>${esc(r.contact.name)}</td><td>${esc(r.contact.phone)}</td><td>${esc(r.contact.group_name)}</td></tr>`).join('')}</table></div></details>
+   <label style="display:flex;gap:8px;font-weight:400;align-items:flex-start"><input type="checkbox" id="ok1" style="margin-top:4px"> I have checked the recipients and message above and approve sending.</label>
+   ${live?`<label>Type the number of recipients (${p.ready_count}) to confirm</label><input type="text" id="ok2" style="max-width:160px">`:''}
+   <div class="row" style="margin-top:14px"><button class="btn sec" id="pvBack">Back</button><button class="btn" id="pvGo" ${p.ready_count&&!p.blocking_problem?'':'disabled'}>Approve & send ${p.ready_count} messages</button></div>`;
+  $('#pvBack').onclick=()=>setStep(1);
+  $('#pvGo').onclick=async()=>{
+    if(!$('#ok1').checked){alert('Tick the approval box first.');return}
+    if(live&&+$('#ok2').value!==p.ready_count){alert('The typed number does not match the number of recipients.');return}
+    try{await api(`/api/campaigns/${p.campaign_id}/approve`,{method:'POST',body:{confirmed:true,expected_count:p.ready_count}});setStep(3);poll(p.campaign_id)}catch(e){alert(e.message)}
+  };
+}
+async function poll(id){
+  clearTimeout(pollT);const d=await api('/api/campaigns/'+id);const c=d.campaign,pr=d.progress;
+  const done=(pr.SENT||0)+(pr.DELIVERED||0)+(pr.READ||0)+(pr.SIMULATED||0)+(pr.FAILED||0),tot=done+(pr.PENDING||0);
+  const active=['IN_PROGRESS','APPROVED','CANCELLING','PAUSING'].includes(c.status);
+  $('#prog').innerHTML=`<div class="row"><b>${esc(c.status)}</b><span class="pill p-mut">${done} of ${tot} processed</span></div>
+   <div class="bar" style="margin:10px 0"><i style="width:${tot?done/tot*100:0}%"></i></div>
+   <div class="tiles">${Object.entries(pr).map(([k,v])=>`<div class="tile"><b>${v}</b><span>${esc(k)}</span></div>`).join('')}</div>
+   ${c.status_note?`<div class="notice n-warn">${esc(c.status_note)}</div>`:''}
+   <div class="row">${c.status==='IN_PROGRESS'?`<button class="btn sec" id="psb">Pause</button>`:''}${active?`<button class="btn danger" id="cxl">Stop sending</button>`:''}
+   ${['PAUSED','INTERRUPTED','PARTIAL'].includes(c.status)?`<button class="btn" id="rsm">Resume</button>`:''}
+   <button class="btn sec" id="newc">New campaign</button></div>`;
+  if($('#psb'))$('#psb').onclick=async()=>{try{await api(`/api/campaigns/${id}/pause`,{method:'POST'});poll(id)}catch(e){alert(e.message)}};
+  if($('#cxl'))$('#cxl').onclick=async()=>{await api(`/api/campaigns/${id}/cancel`,{method:'POST'});poll(id)};
+  if($('#rsm'))$('#rsm').onclick=async()=>{try{await api(`/api/campaigns/${id}/resume`,{method:'POST',body:{confirmed:true}});poll(id)}catch(e){alert(e.message)}};
+  $('#newc').onclick=()=>{picked.clear();selGroups.clear();initCampaign()};
+  if(active)pollT=setTimeout(()=>poll(id),2000);
+}
+
+/* -------- contacts & consent -------- */
+let SEL=new Set();
+async function loadContacts(){
+  const [s,b,g]=await Promise.all([api('/api/consent/summary'),api('/api/consent/bases'),api('/api/groups')]);
+  $('#ctiles').innerHTML=[['real_total','People in list'],['sendable','Ready to message'],['unverified','Opt-in not recorded'],['opted_out','Opted out']].map(([k,l])=>`<div class="tile"><b>${s[k]||0}</b><span>${l}</span></div>`).join('');
+  $('#basis').innerHTML=Object.entries(b).map(([k,v])=>`<option value="${esc(k)}">${esc(v)}</option>`).join('');
+  const go=g.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');$('#impGroup').innerHTML=go;$('#nGroup').innerHTML=go;
+  searchContacts();
+}
+async function searchContacts(){
+  const d=await api(`/api/contacts/search?q=${encodeURIComponent($('#cq').value)}&status=${$('#cstatus').value}&limit=300`);SEL.clear();updSel();
+  $('#clist').innerHTML=d.contacts.map(c=>{const st=c.opted_out_at?['Opted out','bad']:(c.opted_in&&c.consent_verified?['Opted in','ok']:['Not recorded','warn']);
+   return `<tr><td><input type="checkbox" data-id="${c.id}"></td><td>${esc(c.name)}</td><td>${esc(c.phone)}</td><td>${esc(c.group_name)}</td><td><span class="pill p-${st[1]}">${st[0]}</span> <small>${esc(c.consent_basis||'')}</small></td></tr>`}).join('')||'<tr><td colspan="5">No contacts</td></tr>';
+  $('#cmore').textContent=d.total>300?`Showing 300 of ${d.total}. Use search to narrow.`:`${d.total} contacts`;
+}
+function updSel(){$('#selCount').textContent=SEL.size+' selected';$('#optBtn').disabled=$('#revBtn').disabled=!SEL.size}
+$('#clist').onchange=e=>{const id=+e.target.dataset.id;e.target.checked?SEL.add(id):SEL.delete(id);updSel()};
+$('#selAll').onchange=e=>{$$('#clist input').forEach(i=>{i.checked=e.target.checked;e.target.checked?SEL.add(+i.dataset.id):SEL.delete(+i.dataset.id)});updSel()};
+$('#cgo').onclick=searchContacts;$('#cq').onkeydown=e=>{if(e.key==='Enter')searchContacts()};
+$('#optBtn').onclick=()=>{$('#optPanel').style.display=''};$('#optNo').onclick=()=>{$('#optPanel').style.display='none'};
+$('#optOk').onclick=async()=>{try{const r=await api('/api/contacts/consent',{method:'POST',body:{contact_ids:[...SEL],basis:$('#basis').value,attest:$('#attest').checked}});
+  $('#optPanel').style.display='none';$('#attest').checked=false;alert(r.updated+' people recorded as opted in.');loadContacts()}catch(e){alert(e.message)}};
+$('#revBtn').onclick=async()=>{if(!confirm('Mark '+SEL.size+' people as opted out? They will never be messaged.'))return;await api('/api/contacts/revoke',{method:'POST',body:{contact_ids:[...SEL]}});loadContacts()};
+$('#impBtn').onclick=async()=>{const f=$('#csvFile').files[0];if(!f){alert('Choose a CSV file first');return}
+  try{const r=await api('/api/contacts/import',{method:'POST',body:{csv_text:await f.text(),group_id:$('#impGroup').value}});
+  $('#impOut').innerHTML=`<div class="notice n-ok">Imported ${r.imported} new, ${r.already_exists} already existed, ${r.invalid} invalid, ${r.duplicate_in_file} duplicates in file. ${esc(r.note)}</div>`;loadContacts()}catch(e){notice($('#impOut'),e.message)}};
+$('#nAdd').onclick=async()=>{try{await api('/api/contacts',{method:'POST',body:{name:$('#nName').value,phone:$('#nPhone').value,group_id:$('#nGroup').value}});$('#nName').value=$('#nPhone').value='';loadContacts()}catch(e){alert(e.message)}};
+
+/* -------- templates -------- */
+let SUGG=null;
+async function loadTemplates(){
+  const d=await api('/api/templates');SUGG=d.suggested;
+  const cls=s=>({APPROVED:'ok',PENDING:'warn',REJECTED:'bad',PAUSED:'bad',DISABLED:'bad'})[(s||'').toUpperCase()]||'mut';
+  $('#tlist').innerHTML=d.templates.map(t=>`<tr><td>${esc(t.name)}</td><td>${esc(t.language)}</td><td>${esc(t.category)}</td><td><span class="pill p-${cls(t.status)}">${esc(t.status)}</span>${t.rejected_reason&&t.rejected_reason!=='NONE'?`<br><small>${esc(t.rejected_reason)}</small>`:''}</td><td><div class="msg">${esc(t.body)}</div></td></tr>`).join('')||'<tr><td colspan="5">No templates yet</td></tr>';
+  $('#tsTpl').innerHTML=d.templates.filter(t=>(t.status||'').toUpperCase()==='APPROVED').map(t=>`<option value="${esc(t.name)}|${esc(t.language)}">${esc(t.name)} (${esc(t.language)})</option>`).join('');
+  if(!$('#tLang').value)$('#tLang').value=(await api('/api/config')).default_language;
+  if(TPL_DRAFT){$('#tName').value='cyber_singh_update_'+new Date().toISOString().slice(5,10).replace('-','');$('#tLang').value=TPL_DRAFT.language;$('#tBody').value=TPL_DRAFT.body;$('#tFoot').value='Reply STOP to unsubscribe';window.TPL_EX=TPL_DRAFT.example_values;TPL_DRAFT=null;window.scrollTo(0,document.body.scrollHeight)}
+}
+$('#syncBtn').onclick=async()=>{try{const r=await api('/api/templates/sync',{method:'POST'});notice($('#syncOut'),r.count+' templates synced','ok');loadTemplates()}catch(e){notice($('#syncOut'),e.message)}};
+$('#tFill').onclick=()=>{$('#tName').value=SUGG.name;$('#tLang').value=SUGG.language;$('#tCat').value=SUGG.category;$('#tBody').value=SUGG.body;$('#tFoot').value=SUGG.footer};
+$('#tCreate').onclick=async()=>{try{const r=await api('/api/templates',{method:'POST',body:{name:$('#tName').value.trim(),language:$('#tLang').value.trim(),category:$('#tCat').value,body:$('#tBody').value,footer:$('#tFoot').value,quick_reply_stop:$('#tStop').checked,example_values:window.TPL_EX||['Manjot','https://www.youtube.com/@CYBERSINGH_Ai','New video']}});
+  notice($('#tOut'),'Submitted. Status: '+r.status+'. Press "Sync from Meta" later to see APPROVED.','ok');loadTemplates()}catch(e){notice($('#tOut'),e.message)}};
+$('#tsGo').onclick=async()=>{const [n,l]=($('#tsTpl').value||'|').split('|');try{const r=await api('/api/test-send',{method:'POST',body:{template_name:n,language:l,params:[$('#tsP1').value,$('#tsP2').value]}});
+  notice($('#tsOut'),r.simulated?'Simulated (safe mode) - nothing was sent.':'Sent. Check your WhatsApp.','ok')}catch(e){notice($('#tsOut'),e.message)}};
+
+/* -------- analytics -------- */
+async function loadAnalytics(){
+  const [a,c]=await Promise.all([api('/api/analytics'),api('/api/config')]);const max=Math.max(1,...a.daily.map(d=>d.n));
+  $('#an').innerHTML=`<div class="tiles">
+   <div class="tile"><b>${a.sent_total}</b><span>messages sent (real)</span></div>
+   <div class="tile"><b>${a.delivery_rate}%</b><span>delivered</span></div>
+   <div class="tile"><b>${a.read_rate}%</b><span>read</span></div>
+   <div class="tile"><b>${a.opt_outs}</b><span>opt-outs</span></div>
+   <div class="tile"><b>${a.unique_recipients_24h} / ${c.daily_recipient_limit}</b><span>people messaged in last 24h</span></div>
+   <div class="tile"><b>${a.consent.sendable}</b><span>people ready to message</span></div></div>
+   <div class="card"><h2>Messages per day</h2><div class="bars" style="margin-top:24px">${a.daily.map(d=>`<div style="height:${d.n/max*100}%"><span>${d.n}</span></div>`).join('')||'<span class="sub">No real sends yet</span>'}</div>
+   <div class="row" style="justify-content:space-between;color:var(--mut);font-size:11px">${a.daily.map(d=>`<span>${esc(d.day.slice(5))}</span>`).join('')}</div></div>
+   <div class="card"><h2>By campaign</h2><table><thead><tr><th>Campaign</th><th>Status</th><th>Sent</th><th>Delivered</th><th>Read</th><th>Failed</th><th>Simulated</th></tr></thead><tbody>${a.campaigns.map(x=>`<tr><td>${esc(x.title)}</td><td>${esc(x.status)}</td><td>${x.sent}</td><td>${x.delivered}</td><td>${x.read}</td><td>${x.failed}</td><td>${x.simulated}</td></tr>`).join('')}</tbody></table></div>
+   <div class="card"><h2>Top failure reasons</h2>${a.top_errors.length?`<table>${a.top_errors.map(e=>`<tr><td><b>${esc(e.code)}</b></td><td>${e.n}</td><td>${esc(e.sample)}</td></tr>`).join('')}</table>`:'<p class="sub">No failures.</p>'}</div>`;
+}
+
+/* -------- history -------- */
+async function loadHistory(){
+  const l=await api('/api/campaigns');
+  $('#hlist').innerHTML=l.map(c=>`<tr style="cursor:pointer" data-id="${c.id}"><td>${c.id}</td><td>${esc(c.title)}</td><td>${esc(c.status)}</td><td>${c.sent_count}</td><td>${c.failed_count}</td><td>${c.skipped_count}</td><td>${esc((c.created_at||'').slice(0,16))}</td></tr>`).join('');
+}
+$('#hlist').onclick=async e=>{const tr=e.target.closest('tr');if(!tr)return;const d=await api('/api/campaigns/'+tr.dataset.id);
+  $('#hdet').style.display='';$('#hdet').innerHTML=`<h2>${esc(d.campaign.title)}</h2><p class="sub">${esc(d.campaign.video_url)} ${d.campaign.status_note?'· '+esc(d.campaign.status_note):''}</p><div class="scroll"><table><thead><tr><th>Name</th><th>Number</th><th>Status</th><th>Detail</th></tr></thead><tbody>${d.dispatches.map(x=>`<tr><td>${esc(x.contact_name)}</td><td>${esc(x.phone)}</td><td>${esc(x.status)}</td><td>${esc(x.error_details||'')}</td></tr>`).join('')}</tbody></table></div>`};
+
+/* -------- setup -------- */
+async function loadReadiness(live){
+  $('#whUrl').textContent=location.origin.replace(/\/$/,'')+'/webhook';
+  const r=await api('/api/meta/readiness?live='+live);
+  const cls={OK:'ok',TODO:'bad',WARN:'warn',ERROR:'bad',INFO:'info'};
+  $('#rd').innerHTML=`<table>${r.checklist.map(c=>`<tr><td><span class="pill p-${cls[c.status]||'mut'}">${esc(c.status)}</span></td><td><b>${esc(c.item)}</b><br><small>${esc(c.detail)}</small>${c.action?`<br><small>→ ${esc(c.action)}</small>`:''}</td></tr>`).join('')}</table>`;
+}
+async function loadLive(){
+  const s=await api('/api/live/status');const L=$('#live');
+  const steps=[[s.credentials&&!s.safe_mode_env,'Meta credentials in .env and SAFE_MODE=false'],[!!s.last_test,'Real test message sent to yourself (Templates tab)'],[s.test_delivered,'Meta confirmed it was DELIVERED (needs the webhook)'],[s.authorized,'You authorised live sending']];
+  L.innerHTML=`<div class="notice ${s.effective_mode==='LIVE'?'n-bad':'n-info'}">Current mode: <b>${s.effective_mode}</b>${s.authorized_at?' (authorised '+esc(s.authorized_at.slice(0,16))+')':''}</div>
+   <table>${steps.map(x=>`<tr><td><span class="pill p-${x[0]?'ok':'warn'}">${x[0]?'done':'to do'}</span></td><td>${x[1]}</td></tr>`).join('')}</table>
+   ${s.last_test?`<p class="sub">Last test: <b>${esc(s.last_test.status)}</b> to number ending ${esc(s.last_test.to_tail)} at ${esc((s.last_test.created_at||'').slice(0,16))} ${s.last_test.error?'- '+esc(s.last_test.error):''}</p>`:''}
+   <div class="row"><button class="btn sec" id="liveRef">Refresh</button>
+   ${s.authorized?'<button class="btn danger" id="liveOff">Switch live sending off</button>':(s.test_delivered?'<input type="text" id="liveTxt" placeholder="Type: ENABLE LIVE SENDING" class="grow"><button class="btn danger" id="liveOn">Authorise live sending</button>':'')}</div>`;
+  $('#liveRef').onclick=loadLive;
+  if($('#liveOn'))$('#liveOn').onclick=async()=>{try{await api('/api/live/authorize',{method:'POST',body:{confirm_text:$('#liveTxt').value}});loadLive();initCampaign()}catch(e){alert(e.message)}};
+  if($('#liveOff'))$('#liveOff').onclick=async()=>{await api('/api/live/disable',{method:'POST'});loadLive();initCampaign()};
+}
+$('#rdLive').onclick=()=>loadReadiness(true);
+$('#subBtn').onclick=async()=>{try{await api('/api/webhook/subscribe',{method:'POST'});loadReadiness(true)}catch(e){alert(e.message)}};
+
+tab('campaign');
+</script>
+<div style="text-align:center;color:var(--mut);font-size:11px;margin:16px">UI build 2026-11-07b</div></body>
+</html>

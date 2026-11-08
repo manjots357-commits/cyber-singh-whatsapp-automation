@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+*.db
+*.db-wal
+*.db-shm
+contacts*.csv
+wa_browser_profile/
+.venv/
+.git/
+__pycache__/
+.pytest_cache/
+legacy/

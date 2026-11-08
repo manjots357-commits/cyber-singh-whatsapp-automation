@@ -1,0 +1,13 @@
+services:
+  whatsapp:
+    build: .
+    env_file: .env
+    environment:
+      WA_DB_PATH: /data/whatsapp_automation.db
+    volumes:
+      - wa_data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    restart: unless-stopped
+volumes:
+  wa_data:
