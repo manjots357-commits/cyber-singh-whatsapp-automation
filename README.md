@@ -1,80 +1,291 @@
 # CYBER SINGH AI — WhatsApp Campaign Automation
 
-A consent-first campaign manager for the **official Meta WhatsApp Cloud API**. Paste a link, review the
-generated message, choose people who agreed to hear from you, approve, and watch delivery and read reports.
-Built with FastAPI and SQLite. It runs in **simulation mode by default**: nothing reaches Meta until you
-deliberately switch live sending on.
+**A consent-first WhatsApp campaign management dashboard powered by the official Meta WhatsApp Cloud API.**
 
-> **Not affiliated with Meta or WhatsApp.** You are responsible for complying with the
-> [WhatsApp Business Messaging Policy](https://business.whatsapp.com/policy) and all applicable laws
-> (consent, anti-spam, data protection). See [docs/MESSAGING_COMPLIANCE.md](docs/MESSAGING_COMPLIANCE.md).
+Build, review, approve, and monitor WhatsApp campaigns through a structured dashboard. Import contacts, manage consent records, prepare multilingual messages, preview recipients, and track campaign activity.
 
-## Features
-- **URL to campaign:** paste a link; the app reads its title/description (SSRF-hardened fetch) and drafts Punjabi and English messages, as free text or as an approved-template proposal.
-- **Approved templates:** create templates on Meta from the dashboard, sync their approval status, send with up to three variables (`{{1}}` name, `{{2}}` link, `{{3}}` title).
-- **Contacts and consent:** CSV import (everyone is imported as *not opted in*), recorded opt-in with a basis, per-send consent re-check, automatic STOP / START handling, audit log.
-- **Preview and approval:** exact recipient list, skipped contacts with reasons, and an explicit approval step before every campaign.
-- **Safe dispatch:** duplicate prevention per (number, link), daily unique-recipient cap, retries with back-off, error classification, circuit breaker.
-- **Controls:** pause, resume, stop; interrupted campaigns recover safely.
-- **Reports:** delivered/read via signed webhooks (`X-Hub-Signature-256`), analytics and campaign history.
-- **Simulation mode:** the default. Live sending needs credentials, `SAFE_MODE=false`, a real test message confirmed **delivered**, and typed owner authorisation.
+Built with **Python, FastAPI, and SQLite**.
 
-## Requirements
-- Python 3.11+
-- A Meta developer app with the WhatsApp product, a WhatsApp Business Account and a sender number (only for live sending)
-- A public HTTPS URL for the webhook (only for live delivery reports; a tunnel works for testing)
+> **Safety first:** The application runs in simulation mode by default. No real WhatsApp messages are sent unless the required credentials, configuration, test delivery, and explicit owner authorization are completed.
+
+---
+
+## Project Overview
+
+CYBER SINGH AI — WhatsApp Campaign Automation is designed to help businesses manage WhatsApp campaigns responsibly.
+
+The application provides a workflow for:
+
+1. Importing and managing contacts.
+2. Recording consent and opt-in information.
+3. Creating campaigns from URLs.
+4. Preparing Punjabi and English messages.
+5. Reviewing recipients and skipped contacts.
+6. Approving campaigns before dispatch.
+7. Monitoring campaign progress and reports.
+
+**The goal is simple: campaign management with transparency, consent, and safety controls.**
+
+## Key Features
+
+### 1. URL-to-Campaign Generation
+- Paste a website or content URL.
+- Extract page title and description.
+- Generate Punjabi and English message drafts.
+- Prepare free-text messages or approved-template proposals.
+- Includes SSRF-hardened URL fetching.
+
+### 2. Contact Management
+- Import contacts through CSV.
+- Store contact information in SQLite.
+- Track opt-in and opt-out status.
+- Maintain consent records and their basis.
+- Imported contacts are never automatically treated as opted in.
+
+### 3. WhatsApp Template Management
+- Create WhatsApp message templates through the dashboard.
+- Synchronize template approval status.
+- Support up to three template variables:
+  - `{{1}}` — Contact name
+  - `{{2}}` — Link
+  - `{{3}}` — Content title
+
+### 4. Campaign Preview and Approval
+- Review the exact recipient list.
+- See contacts skipped and the reasons.
+- Preview messages before sending.
+- Require explicit approval before every campaign.
+
+### 5. Safety-First Message Dispatch
+- Duplicate-send prevention.
+- Daily unique-recipient limits.
+- Retry handling with back-off.
+- Error classification.
+- Circuit-breaker protection.
+- Pause, resume, and stop controls.
+
+### 6. Campaign Analytics and Reports
+- Campaign history.
+- Delivery and read status through signed webhooks.
+- Webhook signature verification using `X-Hub-Signature-256`.
+- Campaign progress and reporting.
+
+### 7. Simulation Mode
+- Enabled by default.
+- Simulates message dispatch without contacting Meta.
+- Displays simulated delivery status.
+- Helps test campaign workflows safely.
+
+---
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Python | Backend development |
+| FastAPI | Web application and API |
+| SQLite | Database |
+| Meta WhatsApp Cloud API | Official WhatsApp integration |
+| HTML, CSS, JavaScript | Dashboard interface |
+| Pytest | Automated testing |
+| Docker | Containerized deployment |
+
+---
+
+## Application Workflow
+
+```text
+Import Contacts
+      |
+      v
+Record Consent
+      |
+      v
+Create Campaign
+      |
+      v
+Generate Message
+      |
+      v
+Preview Recipients
+      |
+      v
+Approve Campaign
+      |
+      v
+Dispatch / Simulation
+      |
+      v
+Monitor Reports
+```
+
+---
 
 ## Installation
-**Windows:** run `setup_windows.bat`, edit `.env`, then run `start_dashboard.bat` (opens http://localhost:8000).
 
-**Any OS:**
+### Requirements
+
+- Python 3.11 or newer
+- Windows, Linux, or macOS
+- Meta Developer App with WhatsApp product (for live integration)
+- WhatsApp Business Account and sender number (for live integration)
+
+### Windows Installation
+
+1. Download or clone this repository.
+2. Open the project folder.
+3. Run:
+
+```bat
+setup_windows.bat
+```
+
+4. Configure your environment variables in `.env`.
+5. Start the dashboard:
+
+```bat
+start_dashboard.bat
+```
+
+6. Open your browser:
+
+```text
+http://localhost:8000
+```
+
+### Manual Installation
+
 ```bash
-python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
+python -m venv .venv
+```
+
+Activate the environment:
+
+**Windows:**
+
+```bat
+.venv\Scripts\activate
+```
+
+**Linux / macOS:**
+
+```bash
+source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
-cp .env.example .env                                   # then edit .env
+```
+
+Create your environment file:
+
+**Windows:**
+
+```bat
+copy .env.example .env
+```
+
+**Linux / macOS:**
+
+```bash
+cp .env.example .env
+```
+
+Start the application:
+
+```bash
 python -m uvicorn app:app --host 127.0.0.1 --port 8000
 ```
-Docker: `docker compose up -d --build` (see [DEPLOYMENT.md](DEPLOYMENT.md)).
+
+---
 
 ## Configuration
-All settings live in `.env` (copy of [`.env.example`](.env.example); `.env` is git-ignored). Secrets are never sent to the browser or logged.
 
-| Variable | Purpose |
+Application settings are stored in `.env`.
+
+| Variable | Description |
 |---|---|
-| `SAFE_MODE` | `true` (default) = simulate only. Set `false` only when you intend to send for real. |
-| `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_BUSINESS_ACCOUNT_ID` | Meta credentials |
-| `META_APP_SECRET`, `WEBHOOK_VERIFY_TOKEN` | Webhook verification (unsigned webhooks are rejected) |
-| `OWNER_WHATSAPP_NUMBER` | The only number the "send test" button may message |
-| `DASHBOARD_PASSWORD` | Required when exposing the dashboard beyond this computer |
-| `DAILY_RECIPIENT_LIMIT` | Unique recipients per rolling 24h (250 for unverified businesses) |
-| `META_GRAPH_VERSION` | Graph API version (default `v26.0`) |
+| `SAFE_MODE` | Simulation mode; enabled by default |
+| `WHATSAPP_TOKEN` | Meta access token |
+| `WHATSAPP_PHONE_NUMBER_ID` | WhatsApp sender number ID |
+| `WHATSAPP_BUSINESS_ACCOUNT_ID` | WhatsApp Business Account ID |
+| `META_APP_SECRET` | Meta app secret |
+| `WEBHOOK_VERIFY_TOKEN` | Webhook verification token |
+| `OWNER_WHATSAPP_NUMBER` | Authorized test recipient |
+| `DASHBOARD_PASSWORD` | Dashboard password |
+| `DAILY_RECIPIENT_LIMIT` | Daily unique-recipient limit |
+| `META_GRAPH_VERSION` | Meta Graph API version |
 
-## Meta WhatsApp Cloud API setup
-Step-by-step screens: [META_SETUP.md](META_SETUP.md): choose a WhatsApp Business Account, business verification, sender number, system-user token, webhook, template, and the four live-sending gates.
+**Important:** Never upload your `.env` file, access tokens, database, or private contact data to GitHub.
 
-## Dashboard usage
-Short version in [OPERATING_PROCEDURE.md](OPERATING_PROCEDURE.md): paste a link, **Analyse link**, choose message and people, **Preview**, **Approve**, watch progress (Pause/Resume/Stop), read the report.
+---
 
-## Consent management
-- Imports never grant consent. Record opt-in only for people who actually agreed, with how they agreed.
-- Only contacts that are opted in, consent-verified and not opted out are ever selectable; this is re-checked immediately before each message.
-- A reply of STOP / UNSUBSCRIBE (including ਬੰਦ / बंद) opts a person out instantly; START opts back in.
+## Meta WhatsApp Cloud API Setup
 
-## Simulation mode
-With `SAFE_MODE=true` (or without credentials, or before live sending is authorised) every send is **simulated**: recorded as `SIMULATED`, never counted as a real send, never contacting Meta. The dashboard shows the current mode.
+For live integration, configure:
+
+1. Meta Developer App.
+2. WhatsApp product.
+3. WhatsApp Business Account.
+4. Sender phone number.
+5. System-user access token.
+6. Webhook configuration.
+7. Approved message templates.
+8. Required live-sending safety checks.
+
+Read the detailed guide:
+
+- [Meta Setup Guide](META_SETUP.md)
+- [Deployment Guide](DEPLOYMENT.md)
+- [Messaging Compliance](docs/MESSAGING_COMPLIANCE.md)
+
+---
+
+## Consent and Messaging Compliance
+
+This project follows a consent-first approach.
+
+- Importing a contact does not grant WhatsApp marketing consent.
+- Only eligible, consent-verified contacts can be selected.
+- Consent is checked again before each message.
+- STOP / UNSUBSCRIBE replies trigger opt-out handling.
+- START replies can restore opt-in status.
+- Approved templates may be required for business-initiated messages outside the customer service window.
+
+Users and operators are responsible for obtaining valid consent and complying with applicable laws and Meta policies.
+
+Official policy: [WhatsApp Business Messaging Policy](https://business.whatsapp.com/policy)
+
+> This project is independent and is not affiliated with, endorsed by, or sponsored by Meta or WhatsApp.
+
+---
+
+## Safety and Live-Sending Requirements
+
+Live sending is disabled by default.
+
+Before enabling live sending, the required safeguards include:
+
+- Valid Meta credentials.
+- Correct WhatsApp Business configuration.
+- `SAFE_MODE=false` set deliberately.
+- A real test message successfully delivered to the authorized owner number.
+- Explicit typed owner authorization.
+
+A successful simulation does not prove that real WhatsApp delivery works.
+
+Meta controls template approvals, messaging limits, quality ratings, and account eligibility. This application cannot override Meta's decisions.
+
+---
 
 ## Testing
+
+Run the automated test suite:
+
 ```bash
-python -m pytest -q       # or run_tests.bat on Windows
+python -m pytest -q
 ```
-Tests use a temporary database and pinned environment: they never read your `.env`, touch your data, or contact Meta. Browser tests are skipped when Playwright/Chromium is not installed.
 
-## Safety limitations
-- Live sending is **unproven until you** deliver a real approved test message to yourself; the software does not claim otherwise.
-- Meta decides template approval, quality rating, tiers, and may refuse marketing messages per user. The app cannot override this.
-- One campaign runs at a time in a single process; use one worker.
-- Consent records are only as truthful as what the operator enters. You are responsible for lawful consent.
-- No unofficial WhatsApp Web automation is included or supported.
-
-## Contributing, security, license
-[CONTRIBUTING.md](CONTRIBUTING.md) · [SECURITY.md](SECURITY.md) · [MIT License](LICENSE)
+Or
